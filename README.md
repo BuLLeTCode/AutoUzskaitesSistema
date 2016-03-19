@@ -1,0 +1,2 @@
+# AutoUzskaitesSistema
+Auto uzskaites sistēma.
