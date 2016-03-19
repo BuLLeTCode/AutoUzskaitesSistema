@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app1">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <script src="js/angularManager.js"></script>
+    <script src="js/jQueryManager.js"></script>
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <title>Auto uzskaite</title>
+</head>
+<body>
+    <div class="container">
+
+        <nav class="navbar navbar-default"><!--navbar-fixed-top Vienmer ekrana navbar-fixed-bottom-->
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                            data-target="#bs-example-navbar-collapse-1" aria-expanded="false"><!-- Poga, kas parādās mazākiem ekrāniem. -->
+
+                        <span class="sr-only"></span><!-- hide info from screenreader-->
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+
+                <div class="collapse navbar-collapse" id="bs-example-nabar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="index.html">Sākums<span class="sr-only"
+                        >(current)</span></a></li>
+                        <li><a href="about.html">Par lapu</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </nav>
+
+        <div class="jumbotron">
+
+            <div id="input-group-main">
+                <div ng-controller="carsCtrl">
+                <button type="button" class="btn btn-primary" ng-click="frmToggle(frm)">Pievienot automašīnu</button>
+                <br>
+                <form class="form-horizontal" id="car-form" ng-submit="pushData(frm)" hidden>
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-addon">Automašīnas marka</span>
+                        <input type="text" class="form-control" ng-model="frm.manufacture" placeholder="Audi">
+                    </div><br />
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-addon">Automašinas modelis</span>
+                        <input type="text" class="form-control" ng-model="frm.model" placeholder="80">
+                    </div><br />
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-addon">Ražošanas gads</span>
+                        <input type="text" class="form-control" ng-model="frm.year" placeholder="1992">
+                    </div>
+                    <br>
+                    <span class="input-group-btn"><button class="btn btn-primary">Pievienot</button></span>
+                </form>
+
+
+                <form role="form">
+                    <div class="form-group">
+                        <label for="car_options"><h3>Izvēlies automašīnu:</h3></label>
+                        <select class="form-control" id="car_options" ng-init="getData()" ng-model="car"
+                                ng-change="getCarInfo(car)" >
+                            <option selected></option>
+                            <option ng-repeat="x in cars">{{ x.Manufacture }} {{ x.Model }} {{x.Year}}</option>
+                        </select>
+                        <br>
+                    </div>
+                </form>
+            </div>
+
+            </div>
+        </div>
+
+        <div ng-controller="maintenanceCtrl">
+        <div class="jumbotron">
+            <h3 id="info_title">Informācija par automašīnu</h3>
+            <div id="auto_info_container">
+                <label><h4>Apkopes:</h4></label>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Apkopes veids</th>
+                        <th>Datums</th>
+                        <th>Izmaksas</th>
+                        <th>Komentari</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th></th>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="add_car_info">
+                <button type="button" class="btn btn-default" ng-click="frmToggleCarService()">Pievienot apkopi</button>
+                <br>
+                <form class="form-horizontal" id="car_input_form" ng-submit="setCarInfo(frm)" hidden>
+                    <div class="input-group input-group-sm" id="car_maintenance_add">
+                        <span class="input-group-addon">Apkopes veids</span>
+                        <select class="form-control" id="car_maintenance_options" ng-model="frm.option">
+                            <option selected></option>
+                            <option>Eļļas maiņa</option>
+                            <option>Zobsiksanas maiņa</option>
+                        </select>
+                    </div><br />
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-addon">Datums</span>
+                        <!--<input type="text" id="datepicker">-->
+                        <input type="text" class="form-control" ng-model="frm.date">
+                    </div><br />
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-addon">Izmaksas</span>
+                        <input type="number" class="form-control" name="price"
+                               pattern="[0-9]+([\.,][0-9]+)?" step="0.01" ng-model="frm.cost">
+                    </div><br />
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-addon">Komentāri</span>
+                        <textarea class="form-control" rows="5" id="maintenance_comments" ng-model="frm.comment"></textarea>
+                    </div>
+                    <div id="submit_new_maintenance">
+                        <button class="btn btn-primary">Pievienot</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <script>
+        angular.element(document).ready(function () {
+            console.log('page loading completed');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+#info_title{
+    font-family: Calibri, sans-serif;
+    color: darkmagenta;
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+    text-align: center;
+}
+
+#car_maintenance_add{
+    padding-top: 10px;
+}
+
+#submit_new_maintenance{
+    padding-top: 20px;
+}
