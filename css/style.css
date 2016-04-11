@@ -1,10 +1,33 @@
-#info_title{
+.info_title{
     font-family: Calibri, sans-serif;
-    color: darkmagenta;
+    color: #337ab7;
     margin: auto;
     width: 50%;
     padding: 10px;
     text-align: center;
+}
+
+.mainMenuButton{
+    color: #b76786
+}
+
+
+@media (max-width: 768px) {
+    .btn-primary {
+        padding:2px 4px;
+        font-size:80%;
+        line-height: 3;
+        border-radius:3px;
+        width: 50%;
+        height: 50%;
+        margin-bottom: 15px;
+        margin-left: 70px;
+    }
+}
+
+.carStatisticElements{
+    font-size: medium;
+    font-style: italic;
 }
 
 #car_maintenance_add{
@@ -13,4 +36,31 @@
 
 #submit_new_maintenance{
     padding-top: 20px;
+}
+
+#add_car_form{
+    padding-top: 10px;
+}
+
+
+body, html, main {
+    /* important */
+    height: 100%;
+}
+
+.cd-fixed-bg {
+
+    min-height: 100%;
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+#cd-fixed-bg-cd-bg-1 {
+    background-image: url("../img/photo.jpeg");
+}
+
+.jumbotron{
+    background: rgba(0,0,0,0.2);
 }

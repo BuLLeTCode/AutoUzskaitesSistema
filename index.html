@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="app1">
+<html lang="en" ng-app="app1" xmlns:izmaksa="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,13 +16,14 @@
     <title>Auto uzskaite</title>
 </head>
 <body>
-    <div class="container">
 
-        <nav class="navbar navbar-default"><!--navbar-fixed-top Vienmer ekrana navbar-fixed-bottom-->
+    <div class="container" id="cd-fixed-bg-cd-bg-1">
+
+        <nav class="navbar navbar-default" style="background: rgba(0,0,0,0.2)"><!--navbar-fixed-top Vienmer ekrana navbar-fixed-bottom-->
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                            data-target="#bs-example-navbar-collapse-1" aria-expanded="false"><!-- Poga, kas parādās mazākiem ekrāniem. -->
+                    <button type="button" class="navbar-toggle collapse" data-toggle="collapse"
+                            data-target="bs-example-navbar-collapse-1" aria-expanded="false"><!-- Poga, kas parādās mazākiem ekrāniem. -->
 
                         <span class="sr-only"></span><!-- hide info from screenreader-->
                         <span class="icon-bar"></span>
@@ -31,11 +32,11 @@
                     </button>
                 </div>
 
-                <div class="collapse navbar-collapse" id="bs-example-nabar-collapse-1">
+                <div class="collapsed navbar-collapse" id="bs-example-nabar-collapse-1">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="index.html">Sākums<span class="sr-only"
+                        <li class="active"><a href="index.html" class="mainMenuButton">Sākums<span class="sr-only"
                         >(current)</span></a></li>
-                        <li><a href="about.html">Par lapu</a></li>
+                        <li><a href="about.html" class="mainMenuButton">Par lapu</a></li>
                     </ul>
                 </div>
 
@@ -49,20 +50,26 @@
                 <button type="button" class="btn btn-primary" ng-click="frmToggle(frm)">Pievienot automašīnu</button>
                 <br>
                 <form class="form-horizontal" id="car-form" ng-submit="pushData(frm)" hidden>
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-addon">Automašīnas marka</span>
-                        <input type="text" class="form-control" ng-model="frm.manufacture" placeholder="Audi">
-                    </div><br />
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-addon">Automašinas modelis</span>
-                        <input type="text" class="form-control" ng-model="frm.model" placeholder="80">
-                    </div><br />
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-addon">Ražošanas gads</span>
-                        <input type="text" class="form-control" ng-model="frm.year" placeholder="1992">
+                    <div id="add_car_form">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">Automašīnas marka</span>
+                            <input type="text" class="form-control" ng-model="frm.manufacture" placeholder="Audi">
+                        </div><br />
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">Automašinas modelis</span>
+                            <input type="text" class="form-control" ng-model="frm.model" placeholder="80">
+                        </div><br />
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">Ražošanas gads</span>
+                            <input type="text" class="form-control" ng-model="frm.year" placeholder="1992">
+                        </div>
+                        <br />
+                        <button class="btn btn-primary" ng-disabled="!frm.manufacture || !frm.model || !frm.year">Pievienot</button>
+                        <span ng-show="!frm.manufacture || !frm.model || !frm.year">Aizpildi visus laukus!</span>
+                        <div id="carAddDialog" title="" hidden>
+                            <p id="carAddDialogValue">Automašīna ir pievienota veiksmīgi!</p>
+                        </div>
                     </div>
-                    <br>
-                    <span class="input-group-btn"><button class="btn btn-primary">Pievienot</button></span>
                 </form>
 
 
@@ -70,7 +77,7 @@
                     <div class="form-group">
                         <label for="car_options"><h3>Izvēlies automašīnu:</h3></label>
                         <select class="form-control" id="car_options" ng-init="getData()" ng-model="car"
-                                ng-change="getCarInfo(car)" >
+                                ng-change="getCarInfo(car)">
                             <option selected></option>
                             <option ng-repeat="x in cars">{{ x.Manufacture }} {{ x.Model }} {{x.Year}}</option>
                         </select>
@@ -84,10 +91,10 @@
 
         <div ng-controller="maintenanceCtrl">
         <div class="jumbotron">
-            <h3 id="info_title">Informācija par automašīnu</h3>
+            <h3 class="info_title">Informācija par automašīnu</h3>
             <div id="auto_info_container">
                 <label><h4>Apkopes:</h4></label>
-                <table class="table">
+                <table class="table" ng-model="carMaintenance">
                     <thead>
                     <tr>
                         <th>Apkopes veids</th>
@@ -97,47 +104,77 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <th></th>
+
+                    <tr ng-repeat="x in carMaintenance">
+                        <th>{{x.Service}}</th>
+                        <th>{{x.Date_service}}</th>
+                        <th>{{x.Cost_service}}</th>
+                        <th>{{x.Comments_service}}</th>
                     </tr>
                     </tbody>
                 </table>
             </div>
 
             <div id="add_car_info">
-                <button type="button" class="btn btn-default" ng-click="frmToggleCarService()">Pievienot apkopi</button>
+                <div class="col-md-12">
+                <button type="button" class="btn btn-primary" id="btn-first" ng-click="updateMaintenanceTable()">Apskatīt apkopes</button>
+                <button type="button" class="btn btn-primary" ng-click="frmToggleCarService()">Pievienot apkopi</button>
+                <button type="button" class="btn btn-primary" ng-click="clearMaintenanceTable()">Notīrīt apkopes</button>
+                <button type="button" class="btn btn-primary" ng-click="clearMaintenanceTable()">Izdzēst apkopi</button>
+                </div>
                 <br>
-                <form class="form-horizontal" id="car_input_form" ng-submit="setCarInfo(frm)" hidden>
+                <form class="form-horizontal" id="car_input_form" ng-submit="setCarMaintenance(frm)" hidden>
                     <div class="input-group input-group-sm" id="car_maintenance_add">
                         <span class="input-group-addon">Apkopes veids</span>
                         <select class="form-control" id="car_maintenance_options" ng-model="frm.option">
                             <option selected></option>
-                            <option>Eļļas maiņa</option>
-                            <option>Zobsiksanas maiņa</option>
+                            <option>Ellas maina</option>
+                            <option>Zobsiksanas maina</option>
+                            <option>Remonts</option>
                         </select>
                     </div><br />
                     <div class="input-group input-group-sm">
                         <span class="input-group-addon">Datums</span>
                         <!--<input type="text" id="datepicker">-->
-                        <input type="text" class="form-control" ng-model="frm.date">
+                        <!--<input type="text" class="form-control" id="datepicker" ng-model="frm.date">-->
+                        <input type="text" class="form-control" id="car_maintenance_date" ng-model="frm.date" placeholder="Formats: dd.mm.yy">
                     </div><br />
                     <div class="input-group input-group-sm">
                         <span class="input-group-addon">Izmaksas</span>
                         <input type="number" class="form-control" name="price"
-                               pattern="[0-9]+([\.,][0-9]+)?" step="0.01" ng-model="frm.cost">
+                               pattern="[0-9]+([\.,][0-9]+)?" step="0.01" id="car_maintenance_cost" ng-model="frm.cost">
                     </div><br />
                     <div class="input-group input-group-sm">
                         <span class="input-group-addon">Komentāri</span>
-                        <textarea class="form-control" rows="5" id="maintenance_comments" ng-model="frm.comment"></textarea>
+                        <textarea class="form-control" rows="5" id="maintenance_comments" id="car_maintenance_comments"
+                                  ng-model="frm.comment"></textarea>
                     </div>
                     <div id="submit_new_maintenance">
                         <button class="btn btn-primary">Pievienot</button>
                     </div>
+
+                    <div id="dialog" title="" hidden>
+                        <p id="dialogValue">Apkope ir veiksmīgi pievienota!</p>
+                    </div>
                 </form>
             </div>
         </div>
+
+            <div class="jumbotron">
+                <h3 class="info_title">Statistikas dati</h3>
+                <div id="totalCostsCar" class="carStatisticElements">
+                    Kopējās izmaksas: {{carTotalCosts}} <span ng-if="carTotalCosts">&euro;</span>
+                    <span ng-if="!carTotalCosts">0 &euro;</span><br />
+                    Veikto eļļas maiņu skaits: {{totalOilChanges}}<span ng-if="!totalOilChanges">0</span><br />
+                    Veikto zobsiksnas maiņu skaits: {{totalTimingBelts}}<span ng-if="!totalTimingBelts">0</span><br />
+                    Veikto remontu skaits: {{totalCarFix}}<span ng-if="!totalCarFix">0</span><br />
+            </div>
+            </div>
+
         </div>
     </div>
+
+
 
     <script>
         angular.element(document).ready(function () {
